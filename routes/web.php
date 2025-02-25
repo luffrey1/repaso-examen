@@ -12,7 +12,7 @@ Route::post('/pasajero', [PasajeroController::class, 'store'])->name('pasajero.s
 Route::get('/pasajero', [PasajeroController::class, 'nombre']);
 Route::get('/pasajero-edades', [PasajeroController::class, 'edades'])->name('pasajero.edad');
 Route::delete('/pasajero-asistencia', [PasajeroController::class, 'destroyAsistencia'])->name('pasajero.destroyAsistencia');
-Route::put('/pasajero-edad/{incremento}', [PasajeroController::class, 'aumentarEdad']);
+
 
 
 //Aviones

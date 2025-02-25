@@ -95,7 +95,7 @@ class PasajeroController extends Controller
 {
     $nombre = $request->query('pasajero'); // Obtener el nombre desde la URL
 
-    $pasajeros = Pasajero::where('nombre', 'LIKE', '%' . $nombre . '%')->get();
+    $pasajeros = Pasajero::where('nombre', 'LIKE', $nombre )->get();
 
     return view('pasajero.nombre', compact('pasajeros'));
 }
@@ -111,10 +111,41 @@ public function destroyAsistencia(Request $request) {
     Pasajero::where('asistencia', '0')->delete();
     return redirect()->back()->with('success', 'Pasajeros sin asistencia eliminados correctamente.');
 }
-public function aumentarEdad($incremento) {
+public function aumentarEdad($incremento){
     Pasajero::query()->update(['edad' => DB::raw("edad + $incremento")]);
-    return redirect()->back()->with('success', 'Edades sumadas correctamente.');
+    return response()->json(['message' => 'Edades sumadas correctamente.'], 200);
 }
 
+public function guardarPasajero(Request $request)
+{
+    // Validación de los campos
+    $request->validate([
+        'nombre' => 'required|min:3',
+        'apellidos' => 'required|min:3',
+        'edad' => 'required|numeric',
+        'asistencia' => 'boolean', 
+        'contrasena' => 'required',
+        'avion_id' => 'required|exists:avions,id'  
+    ]);
+    
+
+    // Crear el pasajero
+    $pasajero = Pasajero::create([
+        'nombre' => $request->nombre,
+        'apellidos' => $request->apellidos,
+        'edad' => $request->edad,
+        'asistencia' => $request->has('asistencia') ? 1 : 0, 
+        'contrasena' => Hash::make($request->contrasena),
+        'avion_id' => $request->avion_id,  // Asignar el avion_id
+    ]);
+
+    return response()->json([
+        'success' => true,
+        'message' => 'pasajero creado :)',
+        'data' => $pasajero 
+    ], 201);
+}
 }   
+
+
 

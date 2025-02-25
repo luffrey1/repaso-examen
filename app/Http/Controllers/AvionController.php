@@ -61,7 +61,7 @@ class AvionController extends Controller
     public function update(Request $request, $id)
     {
         $avion = Avion::findOrFail($id);
-        $avion->update($request->all());
+        $avion->update($request->all());    
 
         return redirect()->route('aeropuerto.index')->with('success', 'Avión actualizado exitosamente.');
     }
